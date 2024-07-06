@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ibkr-dashboard-nginx
+  labels:
+    app: ibkr-dashboard-nginx
+spec:
+  volumes:
+  - name: ibkrweb-pv-storage
+    persistentVolumeClaim:
+      claimName: ibkrweb-pv-claim
+  - name: ibkr-dashboard-secrets
+    secret:
+      secretName: ibkr-dashboard-secrets
+  - name: ibkr-dashboard-secrets-users
+    secret:
+      secretName: ibkr-dashboard-secrets-users
+  - name: ibkr-nginx-config
+    configMap:
+      name: ibkr-nginx-config
+  containers:
+  - name: ibkr-dashboard-nginx
+    image: adamlechnos/ibkr-dashboard-nginx
+    ports:
+    - containerPort: 8443
+    resources:
+      limits:
+        cpu: 100m
+        memory: 50Mi
+    volumeMounts:
+    - mountPath: "/usr/src/app/webserver"
+      name: "ibkrweb-pv-storage"
+    - mountPath: "/usr/src/app/certchain"
+      name: ibkr-dashboard-secrets
+      readOnly: true
+    - mountPath: "/etc/nginx/conf.d"
+      name: ibkr-nginx-config
+      readOnly: true
+    - mountPath: "/etc/nginx/htpasswd"
+      name: ibkr-dashboard-secrets-users
+      readOnly: true
+    lifecycle:
+      postStart:
+        exec:
+          command:
+          - "/bin/sh"
+          - "-c"
+          - if [[ ! -d  /usr/src/app/webserver/images ]]; then mkdir -p /usr/src/app/webserver/images; fi
+          - cp /usr/src/app/webserver/*.svg /usr/src/app/webserver/images"
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ibkr-ibeam
+  labels:
+    app: ibkr-ibeam
+spec:
+  containers:
+  - name: ibkr-ibeam
+    image: adamlechnos/ibeam
+    envFrom:
+    - secretRef:
+        name: ibkr-ibeam-creds
+    ports:
+    - containerPort: 5000
+    - containerPort: 5001
+    resources:
+      limits:
+        cpu: 200m
+        memory: 750Mi
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ibkr-api-parser
+  labels:
+    app: ibkr-api-parser
+spec:
+  volumes:
+  - name: ibkrweb-pv-storage
+    persistentVolumeClaim:
+      claimName: ibkrweb-pv-claim
+  containers:
+  - name: ibkr-ibeam
+    image: adamlechnos/ibkr-create-website
+    env:
+    - name: PYTHONUNBUFFERED
+      value: "1"
+    - name: sleepTimeSeconds
+      value: "60"
+    - name: webPageTitle
+      value: "IBKR Dashboard"
+    resources:
+      limits:
+        cpu: 100m
+        memory: 50Mi
+    volumeMounts:
+    - mountPath: "/usr/src/app/webserver"
+      name: "ibkrweb-pv-storage"

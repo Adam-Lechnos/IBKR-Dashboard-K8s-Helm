@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibkr-dashboard-nginx
+spec:
+  selector:
+    app: ibkr-dashboard-nginx
+  ports:
+  - protocol: TCP
+    port: 8443
+    targetPort: 8443
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibkr-ibeam
+spec:
+  selector:
+    app: ibkr-ibeam
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibeam
+spec:
+  selector:
+    app: ibkr-ibeam
+  ports:
+  - name: ibeam-gateway
+    protocol: TCP
+    port: 5000
+    targetPort: 5000

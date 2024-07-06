@@ -1,0 +1,25 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: ibkr-pv-claim
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#   - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: "90Mi"
+
+# ---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ibkrweb-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: "90Mi"

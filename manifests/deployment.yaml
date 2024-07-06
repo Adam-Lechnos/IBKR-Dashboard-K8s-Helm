@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibkr-dashboard
+  labels:
+    app: ibkr
+    name: ibkr-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ibkr
+      name: ibkr-dashboard
+  template:
+    metadata:
+      labels:
+        app: ibkr
+        name: ibkr-dashboard
+    spec:
+      containers:
+      - name: ibkr-push-gdrive
+        image: adamlechnos/ibkr-push-gdrive
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "50m"
+          limits:
+            memory: "10Mi"
+            cpu: "50m"
+      - name: ibkr-create-website
+        image: adamlechnos/ibkr-create-website
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "50m"
+          limits:
+            memory: "10Mi"
+            cpu: "50m"
+      - name: ibkr-dashboard
+        image: adamlechnos/ibkr-dashboard
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "50m"
+          limits:
+            memory: "10Mi"
+            cpu: "50m"
+      - name: ibeam
+        image: adamlechnos/ibeam
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "50m"
+          limits:
+            memory: "10Mi"
+            cpu: "50m"
+
