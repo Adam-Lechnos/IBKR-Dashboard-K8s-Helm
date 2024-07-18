@@ -1,0 +1,36 @@
+{{ range .Values.deployments }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  labels:
+    {{- toYaml .labels | default "" | nindent 10 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- toYaml .labels | default "" | nindent 10 }}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .labels | default "" | nindent 10 }}
+    spec:
+      containers:
+      - name: {{ .name }}
+        image: {{ .image }}
+        envFrom:
+          {{- toYaml .envFrom | default "" | nindent 10 }}
+        env:
+          {{- toYaml .env | default "" | nindent 10 }}
+        ports:
+          {{- toYaml .ports | default "" | nindent 10 }}
+        resources:
+          {{- toYaml .resources | default "" | nindent 10 }}
+        volumeMounts:
+          {{- toYaml .volumeMounts | default "" | nindent 10 }}
+        lifecycle:
+          {{- toYaml .lifecycle | default "" | nindent 10 }}
+      volumes:
+        {{- toYaml .volumes | default "" | nindent 10 }}
+{{ end }}

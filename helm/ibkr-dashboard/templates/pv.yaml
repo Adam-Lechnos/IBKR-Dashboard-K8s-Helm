@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.persistentvolumes.name }}
+  labels:
+    # type: local
+    {{- toYaml .Values.global.labels | default "" | nindent 10 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.persistentvolumes.path }}

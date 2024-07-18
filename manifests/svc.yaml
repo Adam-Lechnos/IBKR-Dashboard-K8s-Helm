@@ -4,7 +4,8 @@ metadata:
   name: ibkr-dashboard-nginx
 spec:
   selector:
-    app: ibkr-dashboard-nginx
+    name: ibkr-dashboard-nginx
+    app: ibkr-dash
   ports:
   - protocol: TCP
     port: 8443
@@ -19,7 +20,8 @@ metadata:
   name: ibkr-ibeam
 spec:
   selector:
-    app: ibkr-ibeam
+    app: ibkr-dash
+    name: ibkr-ibeam
   ports:
   - protocol: TCP
     port: 5000
@@ -34,7 +36,8 @@ metadata:
   name: ibeam
 spec:
   selector:
-    app: ibkr-ibeam
+    app: ibkr-dash
+    name: ibkr-ibeam
   ports:
   - name: ibeam-gateway
     protocol: TCP

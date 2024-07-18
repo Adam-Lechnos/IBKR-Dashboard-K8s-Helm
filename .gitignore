@@ -168,3 +168,5 @@ secrets-ibeam.yaml
 secrets-users.yaml
 *.key
 *.crt
+*.dec
+.sops.*.
