@@ -25,9 +25,47 @@ persistentvolumes:
   name: ibkrweb-pv-volume-helm
   path: /mnt/ibkr/web-data
 
-
 persistentVolumeClaim:
   claimName: ibkrweb-pv-claim-helm
+
+services:
+  - name: ibkr-dashboard-helm
+    selector:
+      name: ibkr-dashboard-helm
+      app: ibkr-dash
+    ports:
+    - protocol: TCP
+      port: 8443
+      targetPort: 8443
+    type: NodePort
+  - name: ibkr-dashboard-helm-ingress
+    selector:
+      name: ibkr-dashboard-helm
+      app: ibkr-dash
+    ports:
+    - protocol: TCP
+      port: 8443
+      targetPort: 8443
+    type: ClusterIP
+  - name: ibkr-ibeam-helm
+    selector:
+      name: ibkr-ibeam-helm
+      app: ibkr-dash
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+    type: NodePort
+  - name: ibeam
+    selector:
+      name: ibkr-ibeam-helm
+      app: ibkr-dash
+    ports:
+    - name: ibeam-gateway-helm
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    type: ClusterIP
 
 deployments:
   - name: ibkr-dashboard-helm

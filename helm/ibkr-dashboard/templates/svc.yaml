@@ -1,0 +1,13 @@
+{{ range .Values.services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+spec:
+  selector:
+    {{- toYaml .selector | default "" | nindent 10 }}
+  ports:
+    {{- toYaml .ports | default "" | nindent 10 }}
+  type: {{ .type }}
+{{ end }}
