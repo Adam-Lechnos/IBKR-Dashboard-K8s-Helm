@@ -3,7 +3,7 @@ K8s manifest and Helm Chart for creating a IBKR Dashboard which includes risk da
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![GitHub Release](https://img.shields.io/github/v/release/adam-lechnos/IBKR-Dashboard-K8s-Helm)
 
-[IBKR-Dashboard Docker App](https://github.com/Adam-Lechnos/IBKR-Dashboard)
+[Docker Compose Edition](https://github.com/Adam-Lechnos/IBKR-Dashboard)
 
 # Prerequisites
 * [Helm Secrets](https://github.com/jkroepke/helm-secrets/releases/tag/v4.6.0)
