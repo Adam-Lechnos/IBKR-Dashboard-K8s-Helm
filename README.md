@@ -80,6 +80,32 @@ creation_rules:
         ```
     * Execute `helm secrets encrypt users.yaml.dec > users.yaml` command to encrypt the file.
 
-# Helm Commands
-* Dry Run `helm secrets install ibkr-dash -f helm/ibkr-dashboard/charts/my-values.yaml -f helm/ibkr-dashboard/charts/credentials.yaml -f helm/ibkr-dashboard/charts/certs.yaml -f helm/ibkr-dashboard/charts/users.yaml helm/ibkr-dashboard/charts --dry-run`
-* Install `helm secrets install ibkr-dash -f helm/ibkr-dashboard/charts/my-values.yaml -f helm/ibkr-dashboard/charts/credentials.yaml -f helm/ibkr-dashboard/charts/certs.yaml -f helm/ibkr-dashboard/charts/users.yaml helm/ibkr-dashboard/charts`
+**Caution:** These secrets are still available unencrypted in BASE64 format once the helm chart is installed. For safe storage of secrets while running, it is recommended to use a secrets manager such as [HashiCorp Vault](https://developer.hashicorp.com/vault/tutorials/kubernetes/vault-secrets-operator).
+
+# Update Values.yaml
+Edit the `values.yaml` to customize the chart install. Value details:
+
+| Value | Description |
+| - | - |
+| global.labels | labels for k8s all resources |
+| configmaps.data | nginx `defualt.conf` for the IBKR Dashboard |
+| services[ibkr-dashboard-helm].ports | IBKR Dashboard port and targetPort for the NodePort service |
+| services[ibkr-dashboard-helm-ingress].ports | IBKR Dashboard LoadBalancer service for use by an Ingress service. Array item must be uncommented |
+
+
+# Helm Install
+
+The install uses the helm secrets plugin to perform a decrypt using the designated PGP key via SOPS. The resulting secrets within the cluster will be available in BASE64 format once deployed and is only encrypted within the helm secret output files created in the [Create and Encrypt Secrets Data](#create-and-encrypt-secrets-data).
+
+
+```
+helm secrets install ibkr-dash -f helm/ibkr-dashboard/charts/credentials.yaml -f helm/ibkr-dashboard/charts/certs.yaml -f helm/ibkr-dashboard/charts/users.yaml helm/ibkr-dashboard/charts -n <namespace>
+```
+
+## Test Installation
+A nodePort Service is created upon install. Execute `kubectl get svc -n <namespace> | grep ibkr-dashboard-helm` command. Access any of your cluster node IPs using the nodePort port, e.g. `8444:<nodePort>/TCP`. If TLS is enabled (default), ensure to to hit the website by using `HTTPS`, e.g., `https:\\<Node IP>:<nodePort>`.
+
+# Remove Unencrypted Secrets Data
+The purpose of using helm secrets with SOPS is to remove the unencrypted data allowing commits to a repo. Upon successful testing you may remove the `*.dec` files created earlier such as `users.yaml.dec`.
+
+
