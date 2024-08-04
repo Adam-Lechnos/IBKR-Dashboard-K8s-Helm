@@ -170,4 +170,4 @@ secrets-users.yaml
 *.crt
 *.dec
 .sops.*.
-./manifest
+manifests/
