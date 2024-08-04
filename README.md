@@ -22,5 +22,3 @@ K8s manifest and Helm Chart for creating a IBKR Dashboard which includes risk da
 # Helm Commands
 * Dry Run `helm secrets install ibkr-dash -f helm/ibkr-dashboard/charts/my-values.yaml -f helm/ibkr-dashboard/charts/credentials.yaml -f helm/ibkr-dashboard/charts/certs.yaml -f helm/ibkr-dashboard/charts/users.yaml helm/ibkr-dashboard/charts --dry-run`
 * Install `helm secrets install ibkr-dash -f helm/ibkr-dashboard/charts/my-values.yaml -f helm/ibkr-dashboard/charts/credentials.yaml -f helm/ibkr-dashboard/charts/certs.yaml -f helm/ibkr-dashboard/charts/users.yaml helm/ibkr-dashboard/charts`
-
-test
